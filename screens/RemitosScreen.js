@@ -24,9 +24,14 @@ const RemitosScreen = ({ navigation }) => {
     fetchRemitos();
   }, []);
 
+  const getFormattedDate = (dateString) => {
+    const date = new Date(dateString);
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+  };
+
   const renderItem = ({ item }) => (
     <View style={styles.remitoContainer}>
-      <Text style={styles.title}>Remito ID: {item.id}</Text>
+      <Text style={styles.title}>{`Remito Nº ${item.id} - ${item.origen} / ${item.destino} - ${getFormattedDate(item.fechaEntrega)}`}</Text>
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate('DetalleRemito', { remitoId: item.id })}
