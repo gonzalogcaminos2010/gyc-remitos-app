@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './screens/LoginScreen';
 import RemitosScreen from './screens/RemitosScreen';
 
+
 const Stack = createStackNavigator();
 
 export default function App() {

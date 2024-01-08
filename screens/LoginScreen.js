@@ -1,24 +1,27 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native'; // Importa useNavigation
 
-//import { login } from '../Services/AuthServices'; // Asegúrate de que la ruta sea correcta
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const navigation = useNavigation(); // Agrega esto para usar la navegación
-  
+    const navigation = useNavigation(); // Ahora useNavigation debería funcionar correctamente
+
     const handleLogin = async () => {
         try {
-            const response = await axios.post('http://localhost:3000/auth/login', {
+            const response = await axios.post('http://192.168.0.112:3000/auth/login', {
                 email: username,
                 password: password,
             });
             const { access_token } = response.data;
+            await AsyncStorage.setItem('userToken', access_token);
 
             console.log('Login exitoso:', access_token);
-            navigation.navigate('RemitosScreen');  // Asume que 'Remitos' es el nombre de tu otra pantalla
+            navigation.navigate('Remitos'); // Asegúrate de que 'Remitos' es el nombre de tu pantalla de remitos
         } catch (error) {
             console.error('Error en el login:', error.response ? error.response.data : error.message);
         }
