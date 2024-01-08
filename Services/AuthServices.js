@@ -1,16 +1,15 @@
 import axios from 'axios';
 
-const API_URL = 'tu-url-de-api'; // Reemplaza con la URL de tu API
+const API_URL = 'http://192.168.0.112:3000/auth';
 
-export const login = async (username, password) => {
+export const login = async (email, password) => {
   try {
-    const response = await axios.post(`${API_URL}/ruta-login`, { // Ajusta la ruta según tu API
-      username,
-      password
+    const response = await axios.post(`${API_URL}/login`, {
+      email,
+      password,
     });
     return response.data;
   } catch (error) {
-    console.error('Error al iniciar sesión:', error.response);
     throw error;
   }
 };

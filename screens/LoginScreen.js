@@ -1,22 +1,38 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 
-const LoginScreen = ({ navigation }) => {
+//import { login } from '../Services/AuthServices'; // Asegúrate de que la ruta sea correcta
+
+const LoginScreen = ({}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = () => {
-        // Aquí puedes añadir la lógica para verificar las credenciales
+    const navigation = useNavigation(); // Agrega esto para usar la navegación
+  
+    const handleLogin = async () => {
+        try {
+            const response = await axios.post('http://localhost:3000/auth/login', {
+                email: username,
+                password: password,
+            });
+            const { access_token } = response.data;
+
+            console.log('Login exitoso:', access_token);
+            navigation.navigate('RemitosScreen');  // Asume que 'Remitos' es el nombre de tu otra pantalla
+        } catch (error) {
+            console.error('Error en el login:', error.response ? error.response.data : error.message);
+        }
     };
+
+
 
     return (
         <View style={styles.container}>
             <Image 
-  source={require('../assets/logo.png')} 
-  style={styles.logo} 
-  resizeMode="contain" // Asegura que la imagen se ajuste dentro de los límites sin cortarse
-/>
-
+                source={require('../assets/logo.png')} 
+                style={styles.logo} 
+                resizeMode="contain"
+            />
             <TextInput
                 style={styles.input}
                 placeholder="Usuario"
