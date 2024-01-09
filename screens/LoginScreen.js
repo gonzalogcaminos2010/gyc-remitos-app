@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'; // Importa useNavigati
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LoginScreen = ({}) => {
+export const LoginScreen = ({}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -86,4 +86,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LoginScreen;
+

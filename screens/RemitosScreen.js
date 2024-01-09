@@ -3,7 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const RemitosScreen = ({ navigation }) => {
+export const RemitosScreen = ({ navigation }) => {
   const [remitos, setRemitos] = useState([]);
 
   useEffect(() => {
@@ -80,4 +80,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RemitosScreen;
+
