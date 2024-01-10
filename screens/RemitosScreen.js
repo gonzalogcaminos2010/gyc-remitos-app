@@ -1,28 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 export const RemitosScreen = ({ navigation }) => {
   const [remitos, setRemitos] = useState([]);
 
-  useEffect(() => {
-    const fetchRemitos = async () => {
-      try {
-        const token = await AsyncStorage.getItem('userToken');
-        const response = await axios.get('http://192.168.0.112:3000/remitos', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setRemitos(response.data);
-      } catch (error) {
-        console.error('Error al obtener los remitos:', error);
-      }
-    };
+  const fetchRemitos = async () => {
+    try {
+      const token = await AsyncStorage.getItem('userToken');
+      const response = await axios.get('http://192.168.0.112:3000/remitos', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data); // Añade esto para revisar la respuesta
 
+      setRemitos(response.data);
+    } catch (error) {
+      console.error('Error al obtener los remitos:', error);
+    }
+  };
+
+  useEffect(() => {
     fetchRemitos();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchRemitos();
+      // Cuando la pantalla pierde el enfoque, puedes agregar una acción aquí si es necesario
+      return () => {};
+    }, [])
+  );
 
   const getFormattedDate = (dateString) => {
     const date = new Date(dateString);
@@ -79,5 +90,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-

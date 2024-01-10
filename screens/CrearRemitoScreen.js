@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 export const CrearRemitoScreen = () => {
+    const navigation = useNavigation(); 
     const [remito, setRemito] = useState({
         destino: '',
         entregadoPor: '',
@@ -27,10 +30,35 @@ export const CrearRemitoScreen = () => {
         setRemito({ ...remito, items: nuevosItems });
     };
 
-    const crearRemito = () => {
-        // Aquí lógica para crear el remito con los datos actuales
-        console.log(remito);
+    const crearRemito = async () => {
+        try {
+            const token = await AsyncStorage.getItem('userToken');
+    
+            // Convertir los items a un objeto articulos
+            const articulos = remito.items.reduce((acc, item) => {
+                if (item.nombre && item.cantidad) {
+                    acc[item.nombre] = item.cantidad;
+                }
+                return acc;
+            }, {});
+    
+            // Crear el objeto de remito completo
+            const remitoCompleto = {
+                articulos,
+                entregadoPor: remito.entregadoPor,
+                recibidoPor: remito.recibidoPor,
+                fechaEntrega: new Date().toISOString(), // O la fecha que corresponda
+            };
+    
+            await axios.post('http://192.168.0.112:3000/remitos', remitoCompleto, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            navigation.navigate('Remitos');
+        } catch (error) {
+            console.error('Error al crear el remito:', error);
+        }
     };
+    
 
     return (
         <ScrollView style={styles.container}>
